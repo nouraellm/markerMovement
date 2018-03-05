@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Marker Movement</title>
+    <style>
+#map {
+        height: 100%;
+          width: 100%;
+      }
+html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+   </style>
+ </head>
+<body>
+    <div id="map"></div>
+<script>
+ function initMap() {  
+       var
+        latLngCenter = new google.maps.LatLng(37.081476, -94.510574),
+        latLngCMarker = new google.maps.LatLng(37.0814, -94.5105),
+        latLngA = new google.maps.LatLng(37.2, -94.1),
+        latLngB = new google.maps.LatLng(38, -93),
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 7,
+            center: latLngCenter,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false
+        }),
+        markerCenter = new google.maps.Marker({
+            position: latLngCMarker,
+            title: 'Location',
+            map: map,
+            draggable: true,
+            visible:false
+        }),
+        markerA = new google.maps.Marker({
+            position: latLngA,
+            title: 'Location',
+            map: map,
+            draggable: true
+        })
+        markerB = new google.maps.Marker({
+            position: latLngB,
+            title: 'Location',
+            map: map,
+            draggable: true
+        })
+        // exemplary setup: 
+        // Assumes that your map is signed to the var "map"
+        // Also assumes that your marker is named "marker"
+        ,
+        circle = new google.maps.Circle({
+            map: map,
+            clickable: false,
+            // metres
+            radius: 100000,
+            fillColor: 'blue',
+            fillOpacity: .6,
+            strokeColor: '#313131',
+            strokeOpacity: .4,
+            strokeWeight: .8
+        });
+    // attach circle to marker
+    circle.bindTo('center', markerCenter, 'position');
+    
+    // get the Bounds of the circle
+     var  bounds = circle.getBounds();
+    // First Result
+     console.log("Marker A is in the circle :"+bounds.contains(latLngA));
+     console.log("Marker B is in the circle :"+bounds.contains(latLngB));
+
+    // get some latLng object and Question if it's contained in the circle:
+    google.maps.event.addListener(markerCenter, 'dragend', function() {
+        latLngCenter = new google.maps.LatLng(markerCenter.position.lat(), markerCenter.position.lng());
+        bounds = circle.getBounds();
+        console.log(bounds.contains(latLngA));
+        console.log(bounds.contains(latLngB));
+    });
+
+    google.maps.event.addListener(markerA, 'dragend', function() {
+        latLngA = new google.maps.LatLng(markerA.position.lat(), markerA.position.lng());
+         console.log("Marker A is in the circle :"+bounds.contains(latLngA));
+    });
+
+    google.maps.event.addListener(markerB, 'dragend', function() {
+        latLngB = new google.maps.LatLng(markerB.position.lat(), markerB.position.lng());
+          console.log("Marker B is in the circle :"+bounds.contains(latLngB));
+    });
+
+    google.maps.event.addListener(markerCenter, 'drag', function() {
+         console.log("draggin Marker A");
+         console.log("draggin Marker B");
+    });
+
+    google.maps.event.addListener(markerA, 'drag', function() {
+          console.log("draggin Marker A");
+    });
+
+    google.maps.event.addListener(markerB, 'drag', function() {
+        console.log("draggin Marker B");
+    });
+    // Adding new Marker to the map on click event
+        google.maps.event.addListener(map, "click", function(event) {
+                // get lat/lng of click
+                var clickLat = event.latLng.lat().toFixed(5);
+                var clickLng = event.latLng.lng().toFixed(5);
+                // Create Marker
+                var markerC = new google.maps.Marker({
+                        position: new google.maps.LatLng(clickLat,clickLng),
+                        map: map,
+                        draggable:true
+                     });
+           
+    // get marker's position 
+     var latLngC = new google.maps.LatLng(window.clickLat, window.clickLng);
+   // show if the marker is in the circle 
+     console.log("the new marker is in the circle :"+bounds.contains(latLngC));
+  // draggin coordinates
+     google.maps.event.addListener(markerCenter, 'dragend', function() {
+        latLngCenter = new google.maps.LatLng(markerCenter.position.lat(), markerCenter.position.lng());
+        bounds = circle.getBounds();
+        console.log(bounds.contains(latLngC));
+    });
+   // Result after draggin
+     google.maps.event.addListener(markerC, 'dragend', function() {
+        latLngC = new google.maps.LatLng(markerC.position.lat(), markerC.position.lng());
+         console.log("the new marker is in the circle :"+bounds.contains(latLngC));
+    });
+  // text at dragging event
+   google.maps.event.addListener(markerC, 'drag', function() {
+        console.log("draggin the new marker");
+    });
+  });
+}
+</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7KZCQ-6uQnxuY6CVE3Pzb5pFufu489qo&libraries=places&callback=initMap" async defer></script>
+  </body>
+</html>
