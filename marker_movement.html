@@ -119,7 +119,7 @@ html, body {
                      });
            
     // get marker's position 
-     var latLngC = new google.maps.LatLng(window.clickLat, window.clickLng);
+     var latLngC = new google.maps.LatLng(markerC.position.lat(), markerC.position.lng());
    // show if the marker is in the circle 
      console.log("the new marker is in the circle :"+bounds.contains(latLngC));
   // draggin coordinates
