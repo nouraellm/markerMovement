@@ -1,5 +1,5 @@
 # Marker Movement
-A map with two markers and there's possibility to add more markers and check their position on a specified circle.
+A map with two markers and there's the possibility to add more markers and check their position on a specific circle.
 # Requirements
 - Internet
 - Developers tool bar ( you can use your browser's inspect instead )
